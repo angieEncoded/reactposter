@@ -1,7 +1,7 @@
 import classes from "./NewPost.module.css"
 import {useState} from 'react';
 
-function NewPost({buttonCloseModal}){
+function NewPost({buttonCloseModal, addPost}){
 
   const [textAreaState, settextAreaState] = useState('');
   const [authorState, setAuthorState] = useState('');
@@ -21,7 +21,8 @@ function NewPost({buttonCloseModal}){
       body: textAreaState, // add from the state slices
       author: authorState
     }
-    console.log(postData)
+    // console.log(postData)
+    addPost(postData);
     buttonCloseModal(); // shut the modal
   }
 
