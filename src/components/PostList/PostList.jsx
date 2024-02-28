@@ -5,7 +5,7 @@ import {useState} from 'react';
 import Modal from "../Modal/Modal"
 
 
-function PostList(props){
+function PostList({donePosting, modalIsVisibleState}){
 
     const [textAreaState, settextAreaState] = useState('');
     const [authorState, setAuthorState] = useState('');
@@ -22,12 +22,14 @@ function PostList(props){
 
     return (
         <>
-            {props.modalIsVisibleState && 
-            <Modal onClose={props.donePosting}>
+            {modalIsVisibleState && 
+            <Modal onClose={donePosting}>
                 {/* pass this function into the prop so we can use it in the other component */}
                 <NewPost 
                     textAreaDataEntered={changeBodyHandler} 
                     authorNameEntered={setAuthorName}
+                    buttonCloseModal={donePosting}
+
                 />
             </Modal> }
 
