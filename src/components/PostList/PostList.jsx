@@ -3,12 +3,22 @@ import Post from "../Posts/Post"
 import NewPost from "../NewPost/NewPost"
 import {useState} from 'react';
 import Modal from "../Modal/Modal"
+import api from "../../util/api"
 
 function PostList({donePosting, modalIsVisibleState}){
 
     const [posts, setPosts] = useState([]);
 
     const addPost = async(postData) => {
+        const serverLoc = `${api.host}/posts`
+        console.log(serverLoc);
+        fetch(serverLoc, {
+            method: 'POST',
+            body: JSON.stringify(postData),
+            headers: {
+                'Content-type': 'application/json'
+            }
+        });
         // How to handle when new state depends on existing state
         setPosts((existingPosts)=>[postData, ...existingPosts]); // add the new post and spread the existing psots
     }
