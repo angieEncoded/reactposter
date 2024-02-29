@@ -1,17 +1,34 @@
 import classes from  "./PostList.module.css" // use .module.css to ensure the styles are containerized
 import Post from "../Posts/Post"
 import NewPost from "../NewPost/NewPost"
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import Modal from "../Modal/Modal"
 import api from "../../util/api"
 
-function PostList({donePosting, modalIsVisibleState}){
 
+function PostList({donePosting, modalIsVisibleState}){
+    const serverLoc = `${api.host}/posts`
     const [posts, setPosts] = useState([]);
 
+    // only excuted once when the component is loaded
+    useEffect(() => {
+
+        const retrievePosts = async() => {
+            const results = await fetch(serverLoc);
+            const jsonResults = await results.json();
+            setPosts(jsonResults.posts);
+        }
+
+        retrievePosts();
+
+    }, []) // the empty array means there are no deps and it will never be rendered again
+
+
+
+
+
     const addPost = async(postData) => {
-        const serverLoc = `${api.host}/posts`
-        console.log(serverLoc);
+
         fetch(serverLoc, {
             method: 'POST',
             body: JSON.stringify(postData),
@@ -22,6 +39,12 @@ function PostList({donePosting, modalIsVisibleState}){
         // How to handle when new state depends on existing state
         setPosts((existingPosts)=>[postData, ...existingPosts]); // add the new post and spread the existing psots
     }
+
+
+
+
+
+
 
     return (
         <>
