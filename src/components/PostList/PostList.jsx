@@ -9,14 +9,21 @@ import api from "../../util/api"
 function PostList({donePosting, modalIsVisibleState}){
     const serverLoc = `${api.host}/posts`
     const [posts, setPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasError, setHasError] = useState(false);
 
     // only excuted once when the component is loaded
     useEffect(() => {
 
         const retrievePosts = async() => {
+            setIsLoading(true);
             const results = await fetch(serverLoc);
+            if (!results.ok){
+                setHasError(true);
+            }
             const jsonResults = await results.json();
             setPosts(jsonResults.posts);
+            setIsLoading(false);
         }
 
         retrievePosts();
@@ -57,7 +64,8 @@ function PostList({donePosting, modalIsVisibleState}){
                 />
             </Modal> }
 
-             {posts.length > 0 && (
+
+             {!isLoading && !hasError && posts.length > 0 && (
                 <ul className={classes.posts}>  
                 {posts.map((post) => 
                 // key should be unique
@@ -65,13 +73,21 @@ function PostList({donePosting, modalIsVisibleState}){
                 )}
                 </ul>
             )}
-             {posts.length == 0 && (
+             {!isLoading && !hasError && posts.length == 0 && (
                 <div style={{textAlign: 'center', color:'white'}}>
                     <h2>There are no posts yet!</h2>
                     <p>Why don't you start adding some?</p>
                 </div>
 
              )}   
+
+             {isLoading && !hasError &&  (
+                <p>Some loading screen here</p>
+             )}
+
+             {!isLoading && hasError && (
+                <p>Some error message here</p>
+             )}
 
         </>
     )
