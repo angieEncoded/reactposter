@@ -1,12 +1,12 @@
 import classes from  "./PostList.module.css" // use .module.css to ensure the styles are containerized
 import Post from "../Posts/Post"
-import NewPost from "../NewPost/NewPost"
+import NewPost from "../../routes/NewPost/NewPost"
 import {useState, useEffect} from 'react';
 import Modal from "../Modal/Modal"
 import api from "../../util/api"
 
 
-function PostList({donePosting, modalIsVisibleState}){
+function PostList(){
     const serverLoc = `${api.host}/posts`
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -55,15 +55,6 @@ function PostList({donePosting, modalIsVisibleState}){
 
     return (
         <>
-            {modalIsVisibleState && 
-            <Modal onClose={donePosting}>
-                {/* pass this function into the prop so we can use it in the other component */}
-                <NewPost 
-                    buttonCloseModal={donePosting}
-                    addPost={addPost}
-                />
-            </Modal> }
-
 
              {!isLoading && !hasError && posts.length > 0 && (
                 <ul className={classes.posts}>  
